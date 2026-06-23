@@ -97,7 +97,26 @@ PAGE_RANGE = (2, 3)
 
 ## Step 2 — Chunking Strategy: Semantic Coherence
 
-_Coming soon_
+Measures how semantically coherent the chunks of different chunking strategies
+are, using multilingual sentence embeddings on the Russian text from Step 1.
+See [`step2-readme.md`](step2-readme.md) for full details.
+
+### Run
+
+```bash
+uv pip install --python .venv sentence-transformers scikit-learn langchain \
+  langchain-text-splitters langchain-experimental langchain-community \
+  langchain-huggingface matplotlib seaborn nltk numpy
+
+uv run --python .venv python step2-semantic-coherence.py
+```
+
+### Output
+
+Compares `fixed_size`, `recursive`, `sentence`, and `semantic` chunking via a
+**Semantic Coherence Score** (mean pairwise cosine similarity of sentence
+embeddings). Writes `step2-output.json`, plots to `step2_plots/`, and a console
+comparison table. On this corpus, **`recursive`** gives the most coherent chunks.
 
 ---
 

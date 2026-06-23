@@ -1,0 +1,141 @@
+{
+  "config": {
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "fixed_sizes": [
+      200,
+      500
+    ],
+    "recursive_chunk_size": 500,
+    "recursive_chunk_overlap": 50,
+    "sentences_per_chunk": 4,
+    "corpus_chars": 5636,
+    "corpus_sentences": 47,
+    "semantic_chunker_skipped_reason": null
+  },
+  "results": {
+    "fixed_size_200": {
+      "coherence_score": 0.2646060840963906,
+      "coherence_variance": 0.009140632373705975,
+      "num_chunks": 29,
+      "scored_chunks": 27,
+      "avg_sentences_per_chunk": 2.5517241379310347
+    },
+    "fixed_size_500": {
+      "coherence_score": 0.2589780846121856,
+      "coherence_variance": 0.024122385769310115,
+      "num_chunks": 12,
+      "scored_chunks": 12,
+      "avg_sentences_per_chunk": 4.833333333333333
+    },
+    "recursive": {
+      "coherence_score": 0.3256997910892549,
+      "coherence_variance": 0.014840630429301557,
+      "num_chunks": 16,
+      "scored_chunks": 16,
+      "avg_sentences_per_chunk": 3.75
+    },
+    "sentence_4": {
+      "coherence_score": 0.3146852015944383,
+      "coherence_variance": 0.020074643956814894,
+      "num_chunks": 12,
+      "scored_chunks": 12,
+      "avg_sentences_per_chunk": 3.9166666666666665
+    },
+    "semantic": {
+      "coherence_score": 0.25926611501084906,
+      "coherence_variance": 0.022219462126152997,
+      "num_chunks": 4,
+      "scored_chunks": 4,
+      "avg_sentences_per_chunk": 11.75
+    }
+  },
+  "per_chunk_scores": {
+    "fixed_size_200": [
+      0.13497893674949482,
+      0.2474105555032663,
+      0.2347109001582611,
+      0.2481602248931634,
+      0.2000467278472279,
+      0.23618444409216596,
+      0.09703530705712694,
+      0.36851894708717614,
+      0.15268930433354302,
+      0.6308956267363293,
+      0.2404897373433693,
+      0.27483472151628313,
+      0.18565591877933244,
+      0.27579287011107534,
+      0.1535399410022775,
+      0.1753602805084985,
+      0.45717961534599605,
+      0.297614689717009,
+      0.20968666024021565,
+      0.20575697382347805,
+      0.505467423071559,
+      0.28743506774946476,
+      0.39705404341671935,
+      0.3137815329355566,
+      0.14490247496254463,
+      0.20621982176620665,
+      0.26296152385520394
+    ],
+    "fixed_size_500": [
+      0.29786170788767546,
+      0.17247322329343462,
+      0.21277616188200393,
+      0.26874376978516684,
+      0.2147993013821789,
+      0.2917542564861451,
+      0.2380687137291749,
+      0.3302814510320256,
+      0.4447061470871224,
+      0.29149182305399135,
+      0.1972530252095738,
+      0.14752743451773356
+    ],
+    "recursive": [
+      0.20938161019133264,
+      0.19292183001817134,
+      0.3275648187014886,
+      0.22456198324429374,
+      0.27445914915150765,
+      0.2648279339539012,
+      0.43566672908532755,
+      0.27151555656614806,
+      0.2885046024630899,
+      0.29115376819410865,
+      0.6450273360400444,
+      0.44515618962813774,
+      0.4338758405358514,
+      0.2926176442233187,
+      0.16249510620407656,
+      0.4514665592272802
+    ],
+    "sentence_4": [
+      0.3144705100367217,
+      0.3428937280502146,
+      0.3017993231802905,
+      0.24007758801375934,
+      0.315627627806103,
+      0.40929020829147006,
+      0.31304247463281915,
+      0.35466329056858487,
+      0.4338758405358514,
+      0.28255388075074545,
+      0.1877574588876899,
+      0.2801704883790106
+    ],
+    "semantic": [
+      0.2461388243007462,
+      0.3229976884759496,
+      0.1877574588876899,
+      0.2801704883790106
+    ]
+  },
+  "recommendation": "RECOMMENDATION: 'recursive' yields the most coherent chunks.\n  - coherence_score   = 0.3257 (higher = sentences inside a chunk are more related)\n  - coherence_variance= 0.0148 (lower = more uniformly coherent)\n  - num_chunks        = 16\n  - avg_sentences/chunk = 3.75",
+  "comparison_table_markdown": "| Strategy            | coherence_score | coherence_variance | num_chunks | avg_sentences_per_chunk |\n| ------------------- | --------------- | ------------------ | ---------- | ----------------------- |\n| fixed_size_200      | 0.2646          | 0.0091             | 29         | 2.55                    |\n| fixed_size_500      | 0.2590          | 0.0241             | 12         | 4.83                    |\n| recursive           | 0.3257          | 0.0148             | 16         | 3.75                    |\n| sentence_4          | 0.3147          | 0.0201             | 12         | 3.92                    |\n| semantic            | 0.2593          | 0.0222             | 4          | 11.75                   |",
+  "plots": [
+    "C:\\Users\\user\\Desktop\\arman-personal-dev\\n-factorial\\seminar_14\\step2_plots\\coherence_bar.png",
+    "C:\\Users\\user\\Desktop\\arman-personal-dev\\n-factorial\\seminar_14\\step2_plots\\coherence_boxplot.png"
+  ]
+}
