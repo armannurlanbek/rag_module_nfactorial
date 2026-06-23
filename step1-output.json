@@ -1,0 +1,34 @@
+{
+  "test_cases": [
+    {
+      "pdf_page_screenshot": "/Users/gizzat/code/rag_module_nfactorial/screenshots/page2.png",
+      "extracted_text": "СОДЕРЖАНИЕ",
+      "extraction_method": "docling"
+    },
+    {
+      "pdf_page_screenshot": "/Users/gizzat/code/rag_module_nfactorial/screenshots/page3.png",
+      "extracted_text": "ПРОМЕЖУТОЧНЫЙ СОКРАЩЁННЫЙ КОНСОЛИДИРОВАННЫЙ ОТЧЁТ О ФИНАНСОВОМ ПОЛОЖЕНИИ\nПо состоянию на 31 марта 2025 года",
+      "extraction_method": "docling"
+    }
+  ],
+  "validation_results": [
+    {
+      "structure_score": 4,
+      "tables_score": 1,
+      "formatting_score": 3,
+      "completeness_score": 4,
+      "overall_score": 3,
+      "comments": "The structure preserved the single main heading but missed subheadings and sub-items that were originally in a list format. There are no tables in the image, so tables' score is not applicable here. Formatting does not include bold or italics that were probably not present. The completeness is mostly intact, covering the key sections, but not displaying page numbers. Overall, some structural nuances are lost.",
+      "page": 2
+    },
+    {
+      "structure_score": 2,
+      "tables_score": 1,
+      "formatting_score": 1,
+      "completeness_score": 1,
+      "overall_score": 1.25,
+      "comments": "Извлечённый текст содержит только заголовок, полностью отсутствует структура документа, таблицы, выделения, а также большая часть содержимого. Не сохранены заголовки и таблицы, отсутствует полнота данных.",
+      "page": 3
+    }
+  ]
+}

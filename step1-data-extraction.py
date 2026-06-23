@@ -13,6 +13,7 @@ load_dotenv()
 PDF_PATH = Path(__file__).parent / "kaztelecom.pdf"
 PAGE_RANGE = (2, 3)
 SCREENSHOTS_DIR = Path(__file__).parent / "screenshots"
+OUTPUT_FILE = Path(__file__).parent / "step1-output.json"
 
 JUDGE_PROMPT = """
 Тебе даны:
@@ -139,8 +140,13 @@ def main():
         validation_results.append(scores)
         print(json.dumps(scores, ensure_ascii=False, indent=2))
 
-    print("\n=== TEST CASES ===")
-    print(json.dumps(test_cases, ensure_ascii=False, indent=2))
+    output = {
+        "test_cases": test_cases,
+        "validation_results": validation_results,
+    }
+
+    OUTPUT_FILE.write_text(json.dumps(output, ensure_ascii=False, indent=2))
+    print(f"\n[INFO] Results saved to {OUTPUT_FILE}")
 
     print("\n=== VALIDATION SUMMARY ===")
     print(json.dumps(validation_results, ensure_ascii=False, indent=2))
