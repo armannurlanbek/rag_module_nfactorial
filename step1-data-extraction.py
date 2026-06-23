@@ -6,6 +6,9 @@ from pathlib import Path
 import anthropic
 import pypdfium2 as pdfium
 from docling.document_converter import DocumentConverter
+from dotenv import load_dotenv
+
+load_dotenv()
 
 PDF_PATH = Path(__file__).parent / "kaztelecom.pdf"
 PAGE_RANGE = (2, 3)

@@ -1,27 +1,49 @@
 # Step 1 — Data Extraction & Validation
 
-Extracts and validates text from specific pages of `kaztelecom.pdf` using [Docling](https://github.com/docling-project/docling).
+Extracts text from pages 2–3 of `kaztelecom.pdf` using [Docling](https://github.com/docling-project/docling), renders page screenshots, and validates extraction quality using Claude Vision as an LLM judge.
 
 ## Requirements
 
 - Python 3.9+
 - [uv](https://github.com/astral-sh/uv) (recommended) **or** pip
+- Anthropic API key
 
 ## Setup
 
-### Option A — uv (recommended)
+### 1. Clone and enter the repo
+
+```bash
+git clone https://github.com/armannurlanbek/rag_module_nfactorial
+cd rag_module_nfactorial
+```
+
+### 2. Configure your API key
+
+```bash
+cp .env.example .env
+```
+
+Open `.env` and replace the placeholder with your real key:
+
+```
+ANTHROPIC_API_KEY=sk-ant-your-key-here
+```
+
+### 3. Install dependencies
+
+**Option A — uv (recommended)**
 
 ```bash
 uv venv .venv
-uv pip install docling
+uv pip install docling anthropic python-dotenv
 ```
 
-### Option B — pip
+**Option B — pip**
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install docling
+pip install docling anthropic python-dotenv
 ```
 
 ## Run
@@ -37,20 +59,23 @@ python3 step1-data-extraction.py
 
 ## Output
 
-The script prints extracted text grouped by page, along with a validation summary:
+The script:
 
-```
-Extracting pages 2-3 from kaztelecom.pdf ...
-[INFO] Page 2: 1 text blocks, 10 chars
-[INFO] Page 3: 2 text blocks, 106 chars
+1. Extracts text from pages 2–3 using Docling
+2. Renders screenshots of those pages → saved to `screenshots/`
+3. Sends each screenshot + extracted text to Claude Vision (LLM as a Judge)
+4. Prints JSON scores per page:
 
-Validation passed
-
-======================================== PAGE 2 ========================================
-...
-
-======================================== PAGE 3 ========================================
-...
+```json
+{
+  "structure_score": 4,
+  "tables_score": 3,
+  "formatting_score": 4,
+  "completeness_score": 5,
+  "overall_score": 4.0,
+  "comments": "...",
+  "page": 2
+}
 ```
 
 ## Configuration
