@@ -1,19 +1,21 @@
 import base64
 import json
-from collections import defaultdict
 from pathlib import Path
 
 import openai
-import pypdfium2 as pdfium
 from docling.document_converter import DocumentConverter
 from dotenv import load_dotenv
 
 load_dotenv()
 
-PDF_PATH = Path(__file__).parent / "kaztelecom.pdf"
-PAGE_RANGE = (2, 3)
-SCREENSHOTS_DIR = Path(__file__).parent / "screenshots"
+IMAGE_DIR = Path(__file__).parent / "image"
 OUTPUT_FILE = Path(__file__).parent / "step1-output.json"
+
+# Map filenames to logical page numbers
+PAGE_IMAGES = {
+    2: IMAGE_DIR / "image.png",
+    3: IMAGE_DIR / "image (1).png",
+}
 
 JUDGE_PROMPT = """
 Тебе даны:
@@ -53,38 +55,19 @@ JUDGE_PROMPT = """
 """
 
 
-def extract_pages(pdf_path: Path, page_range: tuple) -> dict:
+def extract_text_from_image(image_path: Path) -> str:
     converter = DocumentConverter()
-    result = converter.convert(pdf_path, page_range=page_range)
-
-    pages_content = defaultdict(list)
+    result = converter.convert(image_path)
+    texts = []
     for item, _level in result.document.iterate_items():
-        if item.prov and hasattr(item, "text"):
-            page_no = item.prov[0].page_no
-            pages_content[page_no].append(item.text)
-
-    return dict(pages_content)
+        if hasattr(item, "text") and item.text:
+            texts.append(item.text)
+    return "\n".join(texts)
 
 
-def render_screenshots(pdf_path: Path, page_range: tuple, out_dir: Path) -> dict:
-    out_dir.mkdir(exist_ok=True)
-    pdf = pdfium.PdfDocument(str(pdf_path))
-    screenshots = {}
-    start, end = page_range
-    for page_no in range(start, end + 1):
-        page = pdf[page_no - 1]  # pypdfium2 is 0-indexed
-        bitmap = page.render(scale=2)
-        image = bitmap.to_pil()
-        path = out_dir / f"page{page_no}.png"
-        image.save(path)
-        screenshots[page_no] = path
-        print(f"[INFO] Screenshot saved: {path}")
-    return screenshots
-
-
-def judge_with_llm(page_no: int, screenshot_path: Path, extracted_text: str) -> dict:
+def judge_with_llm(image_path: Path, extracted_text: str) -> dict:
     client = openai.OpenAI()
-    with open(screenshot_path, "rb") as f:
+    with open(image_path, "rb") as f:
         image_data = base64.standard_b64encode(f.read()).decode("utf-8")
 
     response = client.chat.completions.create(
@@ -116,26 +99,23 @@ def judge_with_llm(page_no: int, screenshot_path: Path, extracted_text: str) -> 
 
 
 def main():
-    print(f"Extracting pages {PAGE_RANGE[0]}-{PAGE_RANGE[1]} from {PDF_PATH.name} ...")
-    pages_content = extract_pages(PDF_PATH, PAGE_RANGE)
-
-    print("\nRendering page screenshots ...")
-    screenshots = render_screenshots(PDF_PATH, PAGE_RANGE, SCREENSHOTS_DIR)
-
     test_cases = []
     validation_results = []
 
-    for page_no in sorted(pages_content):
-        extracted_text = "\n".join(pages_content[page_no])
+    for page_no, image_path in sorted(PAGE_IMAGES.items()):
+        print(f"\n[INFO] Processing page {page_no} — {image_path.name} ...")
+
+        extracted_text = extract_text_from_image(image_path)
+        print(f"[INFO] Extracted {len(extracted_text)} chars")
 
         test_cases.append({
-            "pdf_page_screenshot": str(screenshots[page_no]),
+            "pdf_page_screenshot": str(image_path),
             "extracted_text": extracted_text,
             "extraction_method": "docling",
         })
 
-        print(f"\n[INFO] Judging page {page_no} with Visual LLM ...")
-        scores = judge_with_llm(page_no, screenshots[page_no], extracted_text)
+        print(f"[INFO] Judging page {page_no} with Visual LLM ...")
+        scores = judge_with_llm(image_path, extracted_text)
         scores["page"] = page_no
         validation_results.append(scores)
         print(json.dumps(scores, ensure_ascii=False, indent=2))
