@@ -1,6 +1,6 @@
-# Step 1 — Data Extraction & Validation
+# RAG Module — nFactorial
 
-Extracts text from pages 2–3 of `kaztelecom.pdf` using [Docling](https://github.com/docling-project/docling), renders page screenshots, and validates extraction quality using Claude Vision as an LLM judge.
+Testing and comparison of RAG system components using **RAGAS** and **LLM as a Judge** methodologies.
 
 ## Requirements
 
@@ -46,7 +46,13 @@ source .venv/bin/activate
 pip install docling openai python-dotenv
 ```
 
-## Run
+---
+
+## Step 1 — Data Extraction & Validation
+
+Extracts text from pages 2–3 of `kaztelecom.pdf` using [Docling](https://github.com/docling-project/docling), renders page screenshots, and validates extraction quality using GPT-4o as a Visual LLM judge.
+
+### Run
 
 ```bash
 # with uv
@@ -57,7 +63,7 @@ source .venv/bin/activate
 python3 step1-data-extraction.py
 ```
 
-## Output
+### Output
 
 The script:
 
@@ -78,7 +84,7 @@ The script:
 }
 ```
 
-## Configuration
+### Configuration
 
 Edit the constants at the top of `step1-data-extraction.py` to change the target file or pages:
 
@@ -86,3 +92,15 @@ Edit the constants at the top of `step1-data-extraction.py` to change the target
 PDF_PATH = Path(__file__).parent / "kaztelecom.pdf"
 PAGE_RANGE = (2, 3)
 ```
+
+---
+
+## Step 2 — Chunking Strategy: Semantic Coherence
+
+_Coming soon_
+
+---
+
+## Step 3 — Chunking Strategy: Context Independence
+
+_Coming soon_
