@@ -6,7 +6,7 @@ Extracts text from pages 2–3 of `kaztelecom.pdf` using [Docling](https://githu
 
 - Python 3.9+
 - [uv](https://github.com/astral-sh/uv) (recommended) **or** pip
-- Anthropic API key
+- OpenAI API key
 
 ## Setup
 
@@ -26,7 +26,7 @@ cp .env.example .env
 Open `.env` and replace the placeholder with your real key:
 
 ```
-ANTHROPIC_API_KEY=sk-ant-your-key-here
+OPENAI_API_KEY=sk-proj-your-key-here
 ```
 
 ### 3. Install dependencies
@@ -35,7 +35,7 @@ ANTHROPIC_API_KEY=sk-ant-your-key-here
 
 ```bash
 uv venv .venv
-uv pip install docling anthropic python-dotenv
+uv pip install docling openai python-dotenv
 ```
 
 **Option B — pip**
@@ -43,7 +43,7 @@ uv pip install docling anthropic python-dotenv
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install docling anthropic python-dotenv
+pip install docling openai python-dotenv
 ```
 
 ## Run
@@ -63,7 +63,7 @@ The script:
 
 1. Extracts text from pages 2–3 using Docling
 2. Renders screenshots of those pages → saved to `screenshots/`
-3. Sends each screenshot + extracted text to Claude Vision (LLM as a Judge)
+3. Sends each screenshot + extracted text to GPT-4o Vision (LLM as a Judge)
 4. Prints JSON scores per page:
 
 ```json

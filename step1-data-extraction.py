@@ -3,7 +3,7 @@ import json
 from collections import defaultdict
 from pathlib import Path
 
-import anthropic
+import openai
 import pypdfium2 as pdfium
 from docling.document_converter import DocumentConverter
 from dotenv import load_dotenv
@@ -82,23 +82,21 @@ def render_screenshots(pdf_path: Path, page_range: tuple, out_dir: Path) -> dict
 
 
 def judge_with_llm(page_no: int, screenshot_path: Path, extracted_text: str) -> dict:
-    client = anthropic.Anthropic()
+    client = openai.OpenAI()
     with open(screenshot_path, "rb") as f:
         image_data = base64.standard_b64encode(f.read()).decode("utf-8")
 
-    response = client.messages.create(
-        model="claude-sonnet-4-6",
+    response = client.chat.completions.create(
+        model="gpt-4o",
         max_tokens=1024,
         messages=[
             {
                 "role": "user",
                 "content": [
                     {
-                        "type": "image",
-                        "source": {
-                            "type": "base64",
-                            "media_type": "image/png",
-                            "data": image_data,
+                        "type": "image_url",
+                        "image_url": {
+                            "url": f"data:image/png;base64,{image_data}",
                         },
                     },
                     {
@@ -110,7 +108,7 @@ def judge_with_llm(page_no: int, screenshot_path: Path, extracted_text: str) -> 
         ],
     )
 
-    text = response.content[0].text
+    text = response.choices[0].message.content
     start_idx = text.find("{")
     end_idx = text.rfind("}") + 1
     return json.loads(text[start_idx:end_idx])
